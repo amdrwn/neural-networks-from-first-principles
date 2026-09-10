@@ -139,8 +139,7 @@ accuracy) down to essentially zero on a small, noisy dataset.
 
 ## 7. Connection to piecewise-linear geometry
 
-A network built entirely from Dense layers and ReLU activations
-computes a **continuous piecewise-linear function** of its input. 
+A network built from affine Dense layers and ReLU activations computes a continuous piecewise-affine function of its input.
 This is not merely an intuition. It is an exact mathematical statement. 
 Composing affine maps with ReLU (itself piecewise linear) yields a function 
 that is affine on each cell of a polyhedral partition of the input space, 
@@ -164,19 +163,7 @@ into another, since that is where the underlying affine map changes.
 The classification boundary is therefore a consequence of the region
 structure without literally tracing its edges.
 
-This connects to a broader research direction: Zhang et al. (2018)
-show that ReLU networks can be understood as **tropical rational
-maps**, ratios of tropical polynomials, where tropical addition is
-min (or max) and tropical multiplication is ordinary addition. Under
-this correspondence, a network's linear regions correspond to cells
-of a polyhedral complex dual to a Newton polytope subdivision, in
-exactly the sense that a tropical polynomial's domains of linearity
-are dual to a regular subdivision of its Newton polytope. What this
-experiment visualises empirically, the tiling of input space into
-linear regions, is the network-side shadow of that dual polytope
-structure. Making that correspondence computationally explicit (e.g.
-extracting the actual tropical polynomial a trained network computes)
-is a natural extension of this project beyond its current scope.
+This connects to a broader research direction: Zhang et al. (2018) show that ReLU networks can be represented as tropical rational maps. Tropical polynomials are piecewise-affine functions whose domains of linearity are related, through polyhedral duality, to regular subdivisions of their Newton polytopes. This provides a tropical-geometric framework for studying the polyhedral structure induced by a ReLU network. The experiment here visualises the network-side activation-region structure; it does not explicitly recover the corresponding tropical polynomials or Newton-polytope subdivisions.
 
 ## 8. Gradient checking: verifying the derivation empirically
 
@@ -199,11 +186,7 @@ has error proportional to eps, while the centred estimate's error is
 proportional to eps^2, so for eps=1e-5, that's the difference between
 ~1e-5 error and ~1e-10 error.
 
-**Why relative error, not absolute error.** Gradients across a
-network can differ by several orders of magnitude (early layers often
-have much smaller gradients than later ones, especially with sigmoid
-activations. This is the vanishing gradient problem in Section 3
-again). An absolute error of 1e-6 is negligible for a gradient of
+**Why relative error, not absolute error.** Gradients across a network can differ by several orders of magnitude (early layers often have much smaller gradients than later ones, especially with sigmoid activations; this is the vanishing gradient problem from Section 3). An absolute error of 1e-6 is negligible for a gradient of
 size 1.0 but enormous for a gradient of size 1e-8. Relative error,
 
     |analytical - numerical| / max(|analytical|, |numerical|)
