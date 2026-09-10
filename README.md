@@ -6,8 +6,8 @@ Every gradient is derived by hand and verified numerically using finite
 differences (see `src/gradient_check.py`).
 
 Most "neural network from scratch" projects stop once the model trains.
-This project also looks at the geometry of ReLU networks. A trained ReLU
-network is a continuous piecewise-linear function, so every input belongs
+This project also looks at the geometry of ReLU networks. A trained ReLU 
+network is a continuous piecewise-affine function, so every input belongs
 to a particular linear region determined by its ReLU activation pattern.
 The goal is to identify and visualise these regions directly, connecting
 the implementation to the result of Zhang et al. (2018) that ReLU
@@ -24,7 +24,7 @@ networks compute tropical rational maps. See
 - **Losses:** MSE, Softmax + Cross-Entropy (combined gradient)
 - **Optimisers:** SGD, Momentum, Adam, all implemented from scratch
 - **Initialisers:** Zeros, random normal, Xavier/Glorot and He
-- **Regularisation:** L2 weight penalty and an implementation of inverted Dropout.
+- **Regularisation:** L2 weight penalty and a standalone implementation of inverted Dropout.
 - **Gradient checking:** analytical gradients verified against centred
   finite-difference estimates, typically to relative errors of 1e-7 or
   better
@@ -144,11 +144,10 @@ gap almost entirely.
 
 ### Linear regions of a trained ReLU network
 
-A ReLU network is exactly piecewise linear. This experiment identifies
-each point's activation pattern across all ReLU units and visualises
-the resulting tiling of input space, 428 distinct regions on this
-particular sampled grid. The decision boundary is piecewise linear
-too, but its pieces run through region interiors, bending only where
+A ReLU network with biases computes a continuous piecewise-affine function.
+This experiment identifies each point's activation pattern across all ReLU units 
+and visualises the resulting tiling of input space, with 428 distinct regions observed on this particular sampled grid.
+The decision boundary is piecewise linear too, but its pieces run through region interiors, bending only where
 they cross into a new region.
 
 ![piecewise linear regions](results/figures/piecewise_linear_regions.png)
