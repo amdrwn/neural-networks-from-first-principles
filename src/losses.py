@@ -15,11 +15,13 @@ class SoftmaxCrossEntropy:
         N = logits.shape[0]
 
         shifted = logits - np.max(logits, axis=1, keepdims=True)
-        exp = np.exp(shifted)
-        self.probs = exp / np.sum(exp, axis=1, keepdims=True)
+        exp_values = np.exp(shifted)
+        sum_exp = np.sum(exp_values, axis=1, keepdims=True)
 
-        log_likelihood = -np.log(self.probs[np.arange(N), targets] + 1e-12)
-        return np.mean(log_likelihood)
+        self.probs = exp_values / sum_exp
+        log_probs = shifted - np.log(sum_exp)
+
+        return -np.mean(log_probs[np.arange(N), targets])
 
     def backward(self):
         N = self.probs.shape[0]
